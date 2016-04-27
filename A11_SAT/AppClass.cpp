@@ -48,9 +48,9 @@ void AppClass::Update(void)
 
 	m_pBOMngr->Update();//Update collision detection
 	
-	//m_pBOMngr->DisplaySphere(-1, REWHITE);
+	// m_pBOMngr->DisplaySphere(-1, REWHITE);
 	m_pBOMngr->DisplayReAlligned();
-	//m_pBOMngr->DisplayOriented(-1, REWHITE);
+	// m_pBOMngr->DisplayOriented(-1, REWHITE);
 
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");

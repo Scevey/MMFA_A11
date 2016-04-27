@@ -55,9 +55,10 @@ MyBOClass::MyBOClass(std::vector<vector3> a_lVectorList)
 	//Max and min as the first vector of the list
 	m_v3Max = m_v3Min = a_lVectorList[0];
 
-	//Get the max and min out of the list
+	//Get the max and min out of the list, also build axes list
 	for (uint nVertex = 1; nVertex < nVertexCount; nVertex++)
 	{
+		// build min and max points
 		if (m_v3Min.x > a_lVectorList[nVertex].x) //If min is larger than current
 			m_v3Min.x = a_lVectorList[nVertex].x;
 		else if (m_v3Max.x < a_lVectorList[nVertex].x)//if max is smaller than current
@@ -196,6 +197,17 @@ void MyBOClass::DisplayReAlligned(vector3 a_v3Color)
 	m_pMeshMngr->AddCubeToRenderList(glm::translate(IDENTITY_M4, m_v3CenterG) *
 		glm::scale(m_v3HalfWidthG * 2.0f), a_v3Color, WIRE);
 }
+bool MyBOClass::IsCollidingSAT()
+{
+	// this method does not yet have input defined, will need vector list or bounding object probably
+	// eight checks here for eight axes
+	// project vector formed from center and width/height onto axes
+	// if combined length of halfWidth/Height projection are less than distance between centers, return false
+	// ideally kick out early with consecutive checks
+
+	// otherwise
+	return true;
+}
 bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 {
 	//Get all vectors in global space
@@ -233,6 +245,9 @@ bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 	if (m_v3MaxG.z < a_pOther->m_v3MinG.z)
 		bColliding = false;
 	if (m_v3MinG.z > a_pOther->m_v3MaxG.z)
+		bColliding = false;
+
+	if (!IsCollidingSAT()) // no input defined for the method yet
 		bColliding = false;
 
 	return bColliding;
