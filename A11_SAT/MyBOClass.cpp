@@ -87,6 +87,17 @@ MyBOClass::MyBOClass(std::vector<vector3> a_lVectorList)
 	m_v3MinG = m_v3Min;
 	m_v3CenterG = m_v3Center;
 	m_v3HalfWidthG = m_v3HalfWidth;
+
+	//list of verteces in model space, probabaklty for bounding box, also probably
+	m_lVertexList = std::vector<vector3>(8); 
+	m_lVertexList[leftBottomBack] = vector3(m_v3Min.x, m_v3Min.y, m_v3Min.z); //left bottom back
+	m_lVertexList[leftBottomFront] = vector3(m_v3Min.x, m_v3Min.y, m_v3Max.z); //left bottom front
+	m_lVertexList[leftTopBack] = vector3(m_v3Min.x, m_v3Max.y, m_v3Min.z); //left top back
+	m_lVertexList[leftTopFront] = vector3(m_v3Min.x, m_v3Max.y, m_v3Max.z); //left top front
+	m_lVertexList[rightBottomBack] = vector3(m_v3Max.x, m_v3Min.y, m_v3Min.z); //right bottom back
+	m_lVertexList[rightBottomFront] = vector3(m_v3Max.x, m_v3Min.y, m_v3Max.z); //right bottom front
+	m_lVertexList[rightTopBack] = vector3(m_v3Max.x, m_v3Max.y, m_v3Min.z); //right top back
+	m_lVertexList[rightTopFront] = vector3(m_v3Max.x, m_v3Max.y, m_v3Max.z); //right top front
 }
 MyBOClass::MyBOClass(MyBOClass const& other)
 {
@@ -181,6 +192,8 @@ vector3 MyBOClass::GetMin(void) { return m_v3Min; }
 vector3 MyBOClass::GetMax(void) { return m_v3Max; }
 vector3 MyBOClass::GetMinG(void) { return m_v3MinG; }
 vector3 MyBOClass::GetMaxG(void) { return m_v3MaxG; }
+std::vector<vector3> MyBOClass::GetVertexList(void) { return m_lVertexList; }
+
 //--- Non Standard Singleton Methods
 void MyBOClass::DisplaySphere(vector3 a_v3Color)
 {
@@ -205,6 +218,10 @@ bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 
 	vector3 v3MinO = vector3(a_pOther->m_m4ToWorld * vector4(a_pOther->m_v3Min, 1.0f));
 	vector3 v3MaxO = vector3(a_pOther->m_m4ToWorld * vector4(a_pOther->m_v3Max, 1.0f));
+
+	vector3 v3Center = vector3(m_m4ToWorld * vector4(m_v3Center, 1.0f));
+
+	vector3 v3CenterO = vector3(a_pOther->m_m4ToWorld * vector4(a_pOther->m_v3Center, 1.0f));
 
 	/*
 	Are they colliding?
@@ -235,6 +252,143 @@ bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 		bColliding = false;
 	if (m_v3MinG.z > a_pOther->m_v3MaxG.z)
 		bColliding = false;
+
+	std::vector<vector3> object1 = m_lVertexList;
+	std::vector<vector3> object2 = a_pOther->GetVertexList();
+
+	for (uint i = 0; i < 8; i++)
+	{
+		object1[i] = vector3(m_m4ToWorld * vector4(object1[i], 1.0f));
+		object2[i] = vector3(a_pOther->m_m4ToWorld * vector4(object2[i], 1.0f));
+	}
+
+	#pragma region please god
+	//m_lVertexList[leftBottomBack] = vector3(m_v3Min.x, m_v3Min.y, m_v3Min.z); //left bottom back
+	//m_lVertexList[leftBottomFront] = vector3(m_v3Min.x, m_v3Min.y, m_v3Max.z); //left bottom front
+	//m_lVertexList[leftTopBack] = vector3(m_v3Min.x, m_v3Max.y, m_v3Min.z); //left top back
+	//m_lVertexList[leftTopFront] = vector3(m_v3Min.x, m_v3Max.y, m_v3Max.z); //left top front
+	//m_lVertexList[rightBottomBack] = vector3(m_v3Max.x, m_v3Min.y, m_v3Min.z); //right bottom back
+	//m_lVertexList[rightBottomFront] = vector3(m_v3Max.x, m_v3Min.y, m_v3Max.z); //right bottom front
+	//m_lVertexList[rightTopBack] = vector3(m_v3Max.x, m_v3Max.y, m_v3Min.z); //right top back
+	//m_lVertexList[rightTopFront] = vector3(m_v3Max.x, m_v3Max.y, m_v3Max.z); //right top front
+
+	//vector3 obj1NormX = object1[leftBottomBack] - object1[rightBottomBack];
+	//vector3 obj1NormY = object1[leftBottomBack] - object1[leftTopBack];
+	//vector3 obj1NormZ = object1[leftBottomBack] - object1[leftBottomFront];
+
+	//vector3 obj2NormX = object2[leftBottomBack] - object2[rightBottomBack];
+	//vector3 obj2NormY = object2[leftBottomBack] - object2[leftTopBack];
+	//vector3 obj2NormZ = object2[leftBottomBack] - object2[leftBottomFront];
+
+	//vector3 cross1x1 = glm::cross(obj1NormX, obj2NormX);
+	//vector3 cross1x2 = glm::cross(obj1NormX, obj2NormY);
+	//vector3 cross1x3 = glm::cross(obj1NormX, obj2NormZ);
+
+	//vector3 cross2x1 = glm::cross(obj1NormY, obj2NormX);
+	//vector3 cross2x2 = glm::cross(obj1NormY, obj2NormY);
+	//vector3 cross2x3 = glm::cross(obj1NormY, obj2NormZ);
+
+	//vector3 cross3x1 = glm::cross(obj1NormZ, obj2NormX);
+	//vector3 cross3x2 = glm::cross(obj1NormZ, obj2NormY);
+	//vector3 cross3x3 = glm::cross(obj1NormZ, obj2NormZ);
+	#pragma endregion
+
+	//if true do the 15 sat checks
+	if (bColliding) {
+		vector3 obj1NormX = object1[leftBottomBack] - object1[rightBottomBack];
+		if (!CheckAxisSAT(object1, object2, obj1NormX)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 obj1NormY = object1[leftBottomBack] - object1[leftTopBack];
+		if (!CheckAxisSAT(object1, object2, obj1NormY)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 obj1NormZ = object1[leftBottomBack] - object1[leftBottomFront];
+		if (!CheckAxisSAT(object1, object2, obj1NormZ)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+
+		vector3 obj2NormX = object2[leftBottomBack] - object2[rightBottomBack];
+		if (!CheckAxisSAT(object1, object2, obj2NormX)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 obj2NormY = object2[leftBottomBack] - object2[leftTopBack];
+		if (!CheckAxisSAT(object1, object2, obj2NormY)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 obj2NormZ = object2[leftBottomBack] - object2[leftBottomFront];
+		if (!CheckAxisSAT(object1, object2, obj2NormZ)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+
+		vector3 cross1x1 = glm::cross(obj1NormX, obj2NormX);
+		if (!CheckAxisSAT(object1, object2, cross1x1)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 cross1x2 = glm::cross(obj1NormX, obj2NormY);
+		if (!CheckAxisSAT(object1, object2, cross1x2)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 cross1x3 = glm::cross(obj1NormX, obj2NormZ);
+		if (!CheckAxisSAT(object1, object2, cross1x3)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+
+		vector3 cross2x1 = glm::cross(obj1NormY, obj2NormX);
+		if (!CheckAxisSAT(object1, object2, cross2x1)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 cross2x2 = glm::cross(obj1NormY, obj2NormY);
+		if (!CheckAxisSAT(object1, object2, cross2x2)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 cross2x3 = glm::cross(obj1NormY, obj2NormZ);
+		if (!CheckAxisSAT(object1, object2, cross2x3)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+
+		vector3 cross3x1 = glm::cross(obj1NormZ, obj2NormX);
+		if (!CheckAxisSAT(object1, object2, cross3x1)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 cross3x2 = glm::cross(obj1NormZ, obj2NormY);
+		if (!CheckAxisSAT(object1, object2, cross3x2)) {
+			bColliding = false;
+			return bColliding;
+		}
+
+		vector3 cross3x3 = glm::cross(obj1NormZ, obj2NormZ);
+		if (!CheckAxisSAT(object1, object2, cross3x3)) {
+			bColliding = false;
+			return bColliding;
+		}
+	}
 
 	return bColliding;
 }

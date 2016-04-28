@@ -7,6 +7,19 @@ Date: 2015/11
 
 #include "RE\ReEng.h"
 
+//enumerator
+enum points {
+	leftBottomBack,
+	leftBottomFront,
+	leftTopBack,
+	leftTopFront,
+	rightBottomBack,
+	rightBottomFront,
+	rightTopBack,
+	rightTopFront
+};
+
+
 //System Class
 class MyBOClass
 {
@@ -26,6 +39,9 @@ class MyBOClass
 	vector3 m_v3HalfWidthG = vector3(0.0f);//Will store half the size of all sides
 
 	matrix4 m_m4ToWorld = IDENTITY_M4; //Matrix that will take us from local to world coordinate
+
+	std::vector<vector3> m_lVertexList;
+	
 public:
 	/*
 	USAGE: Constructor
@@ -125,6 +141,12 @@ public:
 	OUTPUT: Maximum in global space
 	*/
 	vector3 GetMaxG(void);
+	/*
+	USAGE: Gets vertex list
+	ARGUMENTS: ---
+	OUTPUT: Vertex list
+	*/
+	std::vector<vector3> GetVertexList(void);
 	/*
 	USAGE: Asks if there is a collision with another Bounding Object object
 	ARGUMENTS:

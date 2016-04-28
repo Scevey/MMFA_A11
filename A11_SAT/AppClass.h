@@ -17,6 +17,11 @@ class AppClass : public ReEngAppClass
 	vector3 m_v3O2 = vector3( 2.5f, 0.0f, 0.0f);
 
 	MyBOManager* m_pBOMngr; //Pointer to Bounding Object Manager
+
+	// extra credit
+	bool showSATPlane = false;
+	matrix4 SATPLane;
+
 public:
 	typedef ReEngAppClass super;
 	/*

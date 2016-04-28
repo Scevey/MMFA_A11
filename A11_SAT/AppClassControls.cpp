@@ -59,6 +59,11 @@ void AppClass::ProcessKeyboard(void)
 		m_v3O1.y += 0.1f;
 #pragma endregion
 
+#pragma region Show Plane Extra Credit
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		showSATPlane = !showSATPlane;
+#pragma endregion
+
 #pragma region Other Actions
 	ON_KEY_PRESS_RELEASE(Escape, NULL, PostMessage(m_pWindow->GetHandler(), WM_QUIT, NULL, NULL));
 	ON_KEY_PRESS_RELEASE(F1, NULL, m_pCameraMngr->SetCameraMode(CAMPERSP));
