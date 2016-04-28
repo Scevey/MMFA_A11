@@ -197,17 +197,6 @@ void MyBOClass::DisplayReAlligned(vector3 a_v3Color)
 	m_pMeshMngr->AddCubeToRenderList(glm::translate(IDENTITY_M4, m_v3CenterG) *
 		glm::scale(m_v3HalfWidthG * 2.0f), a_v3Color, WIRE);
 }
-bool MyBOClass::IsCollidingSAT()
-{
-	// this method does not yet have input defined, will need vector list or bounding object probably
-	// eight checks here for eight axes
-	// project vector formed from center and width/height onto axes
-	// if combined length of halfWidth/Height projection are less than distance between centers, return false
-	// ideally kick out early with consecutive checks
-
-	// otherwise
-	return true;
-}
 bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 {
 	//Get all vectors in global space
@@ -245,9 +234,6 @@ bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 	if (m_v3MaxG.z < a_pOther->m_v3MinG.z)
 		bColliding = false;
 	if (m_v3MinG.z > a_pOther->m_v3MaxG.z)
-		bColliding = false;
-
-	if (!IsCollidingSAT()) // no input defined for the method yet
 		bColliding = false;
 
 	return bColliding;

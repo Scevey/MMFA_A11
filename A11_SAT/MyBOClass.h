@@ -133,12 +133,6 @@ public:
 	*/
 	bool IsColliding(MyBOClass* const a_pOther);
 	/*
-	USAGE: Determines if there is a collision with another Bounding Object using SAT
-	ARGUMENTS: Not sure yet
-	OUTPUT: check of SAT
-	*/
-	bool IsCollidingSAT();
-	/*
 	USAGE: Displays the Bounding Sphere of the BO in the specified color
 	ARGUMENTS:
 	- vector3 a_v3Color = REDEFAULT -> Color of the Object to display if the value is REDEFAULT it
