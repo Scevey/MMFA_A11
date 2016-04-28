@@ -252,3 +252,34 @@ bool MyBOClass::IsColliding(MyBOClass* const a_pOther)
 
 	return bColliding;
 }
+
+bool MyBOClass::CheckAxisSAT(std::vector<vector3> a_lVertices, std::vector<vector3> a_lOtherVertices, vector3 axis)
+{
+	float max1;
+	float min1;
+	float max2;
+	float min2;
+
+	//project each vec3 in the first object onto the axis, saving min and max values
+	for (int c = 0; c < a_lVertices.size(); c++) {
+		vector3 vert = a_lVertices[c];
+		float projectedVert = glm::dot(vert, axis);// / glm::length(vert);
+		if (c == 0 || projectedVert > max1)
+			max1 = projectedVert;
+		if (c == 0 || projectedVert < min1)
+			min1 = projectedVert;
+	}
+
+	//do the same for the second object
+	for (int c = 0; c < a_lOtherVertices.size(); c++) {
+		vector3 vert = a_lOtherVertices[c];
+		float projectedVert = glm::dot(vert, axis);// / glm::length(vert);
+		if (c == 0 || projectedVert > max2)
+			max2 = projectedVert;
+		if (c == 0 || projectedVert < min2)
+			min2 = projectedVert;
+	}
+
+	//if the ranges overlap, return true
+	return !(max1 < min2 || max2 < min1);
+}

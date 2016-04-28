@@ -176,6 +176,8 @@ private:
 	OUTPUT: ---
 	*/
 	void Init(void);
+
+	static bool CheckAxisSAT(std::vector<vector3> a_lVertices, std::vector<vector3> a_lOtherVertices, vector3 axis);
 };
 
 #endif //__MYBOCLASS_H__
